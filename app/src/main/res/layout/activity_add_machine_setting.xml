@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:orientation="vertical"
+    tools:context=".AddMachineSetting">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Machine Name"
+                android:layout_marginTop="16dp"
+                android:textAppearance="@android:style/TextAppearance.Material.Subhead" />
+            <EditText
+                android:id="@+id/machine_name_setting_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:hint="SW318..." />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Wire Name"
+                android:layout_marginTop="16dp"
+                android:textAppearance="@android:style/TextAppearance.Material.Subhead" />
+            <EditText
+                android:id="@+id/wire_name_setting_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:hint="XH500.." />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Left Position"
+                        android:layout_marginTop="16dp"
+                        android:textAppearance="@android:style/TextAppearance.Material.Subhead" />
+                    <EditText
+                        android:id="@+id/left_position_setting_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:inputType="phone|numberDecimal|number"
+                        android:hint="24.00..." />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Right Position"
+                        android:layout_marginTop="16dp"
+                        android:textAppearance="@android:style/TextAppearance.Material.Subhead" />
+                    <EditText
+                        android:id="@+id/right_position_setting_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:inputType="phone|numberDecimal|number"
+                        android:hint="42.00..." />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Traverse Speed"
+                android:layout_marginTop="16dp"
+                android:textAppearance="@android:style/TextAppearance.Material.Subhead" />
+            <EditText
+                android:id="@+id/traverse_speed_setting_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:inputType="phone|numberDecimal|number"
+                android:hint=".580" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Reel Type"
+                android:layout_marginTop="16dp"
+                android:textAppearance="@android:style/TextAppearance.Material.Subhead" />
+            <RadioGroup
+                android:id="@+id/radio_group_reel_types"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Reel Size"
+                android:layout_marginTop="16dp"
+                android:textAppearance="@android:style/TextAppearance.Material.Subhead" />
+
+            <Spinner
+                android:id="@+id/reel_sizes_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </Spinner>
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

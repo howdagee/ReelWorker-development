@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginEnd="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp" >
+
+    <LinearLayout
+        android:id="@+id/card_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp">
+
+
+            <TextView
+                android:id="@+id/wire_name_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                tools:text="XH500"
+                android:layout_weight="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+
+                <TextView
+                    android:id="@+id/left_position_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                    android:textSize="16sp"
+                    android:text="@string/left_position_label"/>
+                <TextView
+                    android:id="@+id/left_position_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAppearance="@android:style/TextAppearance.Material.Subhead"
+                    tools:text="24.50"/>
+
+                <TextView
+                    android:id="@+id/right_position_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:textAlignment="viewEnd"
+                    android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                    android:textSize="16sp"
+                    android:text="@string/right_position_label"
+                    />
+                <TextView
+                    android:id="@+id/right_position_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:textAppearance="@android:style/TextAppearance.Material.Subhead"
+                    tools:text="40.55"/>
+            </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/reel_type_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                android:textSize="16sp"
+                tools:text="Wood: "/>
+            <TextView
+                android:id="@+id/reel_size_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Material.Subhead"
+                tools:text="24x12"/>
+
+
+            <TextView
+                android:id="@+id/machine_name_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="15.0kv"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:textAppearance="@android:style/TextAppearance.Material.Subhead"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                android:layout_weight="0"
+                android:textSize="16sp"
+                android:text="@string/traverse_label" />
+
+            <TextView
+                android:id="@+id/traverse_speed_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                tools:text=".403"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>

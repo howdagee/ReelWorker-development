@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="reel_types">
+        <item>Wood</item>
+        <item>Plastic</item>
+        <item>Plywood</item>
+    </string-array>
+    <string-array name="reel_sizes_wood">
+        <item>24x12x10</item>
+        <item>24x18x10</item>
+        <item>30x18x12</item>
+        <item>36x24x17</item>
+        <item>42x26x18</item>
+        <item>42x26x28BD</item>
+        <item>48x32x24</item>
+        <item>58x32x28</item>
+        <item>66x36x36</item>
+        <item>72x36x36</item>
+        <item>78x48x42</item>
+    </string-array>
+    <string-array name="reel_sizes_plastic">
+        <item>06x06x02</item>
+        <item>06x09x02</item>
+        <item>10x08x03</item>
+        <item>12x03x08</item>
+        <item>12x03x08DP</item>
+        <item>12x06x05</item>
+        <item>12x11x05</item>
+        <item>14x11x05</item>
+        <item>16x11x05</item>
+    </string-array>
+    <string-array name="reel_sizes_plywood">
+        <item>12x11x05</item>
+        <item>14x11x05</item>
+        <item>16x09x08</item>
+        <item>16x11x05</item>
+        <item>18x11x05</item>
+        <item>24x12x10</item>
+        <item>24x18x10</item>
+    </string-array>
+</resources>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical"
+    tools:context=".SelectWireProperties">
+
+    <TextView
+        android:id="@+id/title_machine_selected"
+        tools:text="Using Machine SW318"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.Material.Headline"/>
+
+    <TextView
+        android:id="@+id/reel_type_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Reel Type"
+        android:textAppearance="@android:style/TextAppearance.Material.Subhead"/>
+
+    <RadioGroup
+        android:id="@+id/radio_group_reel_types"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/enter_wire_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Enter wire name"
+        android:textAppearance="@android:style/TextAppearance.Material.Subhead"/>
+
+    <EditText
+        android:id="@+id/wire_name_for_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="XH500..."/>
+
+    <Button
+        android:id="@+id/search_wire_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Search Machine Settings" />
+
+
+</LinearLayout>
