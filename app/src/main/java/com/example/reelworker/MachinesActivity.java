@@ -21,8 +21,6 @@ import java.util.List;
 
 public class MachinesActivity extends AppCompatActivity {
 
-    private MachineViewModel machineViewModel;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +43,7 @@ public class MachinesActivity extends AppCompatActivity {
         final MachineAdapter adapter = new MachineAdapter();
         recyclerView.setAdapter(adapter);
 
-        machineViewModel = ViewModelProviders.of(this).get(MachineViewModel.class);
+        MachineViewModel machineViewModel = ViewModelProviders.of(this).get(MachineViewModel.class);
         machineViewModel.getAllMachines().observe(this, new Observer<List<Machine>>() {
             @Override
             public void onChanged(@Nullable List<Machine> machines) {

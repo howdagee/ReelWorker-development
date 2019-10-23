@@ -62,7 +62,6 @@ public class MachineSettingAdapter extends RecyclerView.Adapter<MachineSettingAd
     }
 
     class MachineSettingHolder extends RecyclerView.ViewHolder {
-        private TextView sparkSetting;
         private TextView leftPosition;
         private TextView rightPosition;
         private TextView traverseSpeed;
@@ -72,7 +71,6 @@ public class MachineSettingAdapter extends RecyclerView.Adapter<MachineSettingAd
 
         public MachineSettingHolder(View itemView) {
             super(itemView);
-            sparkSetting = itemView.findViewById(R.id.machine_name_info);
             leftPosition = itemView.findViewById(R.id.left_position_info);
             rightPosition = itemView.findViewById(R.id.right_position_info);
             traverseSpeed = itemView.findViewById(R.id.traverse_speed_info);
