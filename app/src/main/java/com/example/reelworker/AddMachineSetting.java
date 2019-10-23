@@ -1,6 +1,9 @@
 package com.example.reelworker;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,8 +20,14 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.reelworker.entities.MachineSettingData;
+import com.example.reelworker.entities.MachineSettingViewModel;
+import com.example.reelworker.entities.Wire;
+import com.example.reelworker.entities.WireViewModel;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.List;
 
 public class AddMachineSetting extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -56,6 +65,7 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
     private RadioGroup reelTypesGroup;
     private String initialReelType;
     String[] reelTypeValues;
+    private WireViewModel wireViewModel;
 
     // For formatting numbers
     private static final DecimalFormat df = new DecimalFormat("#.##");
@@ -125,6 +135,12 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
         setTitle("Add Machine Setting");
+
+        wireViewModel = ViewModelProviders.of(this).get(WireViewModel.class);
+        Wire selectedWire = wireViewModel.getWireProperties(wireName);
+        double selectedWireOD = selectedWire.getDiameter();
+        Toast.makeText(this, "Wire OD:" + selectedWireOD, Toast.LENGTH_LONG).show();
+
     }
 
     private String calculateTraverseSpeed(double machineMultiplier, double wireOD) {

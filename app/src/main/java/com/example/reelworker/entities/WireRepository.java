@@ -14,6 +14,7 @@ public class WireRepository {
     private WireDao wireDao;
     private LiveData<List<Wire>> allWires;
     private LiveData<List<Wire>> wireByName;
+    private Wire wireProperties;
 
     public WireRepository(Application application) {
         ServiceWireDatabase database = ServiceWireDatabase.getDatabase(application);
@@ -43,6 +44,10 @@ public class WireRepository {
 
     public LiveData<List<Wire>> getWireByName(String name) {
         return wireByName = wireDao.getWireByName(name);
+    }
+
+    public Wire getWireProperties(String name) {
+        return wireProperties = wireDao.getWireProperties(name);
     }
 
     private static class InsertWireAsyncTask extends AsyncTask<Wire, Void, Void> {
@@ -104,4 +109,5 @@ public class WireRepository {
             return null;
         }
     }
+
 }
