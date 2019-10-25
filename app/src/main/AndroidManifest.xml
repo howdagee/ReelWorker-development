@@ -21,13 +21,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".AddWireActivity"
-            android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".MainActivity"
-            android:launchMode="singleTop" />
+            android:parentActivityName=".MachinesActivity" />
     </application>
 
 </manifest>

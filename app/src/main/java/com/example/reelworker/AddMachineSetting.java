@@ -1,8 +1,10 @@
 package com.example.reelworker;
 
+import android.app.ProgressDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,11 +22,13 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.reelworker.database.ServiceWireDatabase;
 import com.example.reelworker.entities.MachineSettingData;
 import com.example.reelworker.entities.MachineSettingViewModel;
 import com.example.reelworker.entities.Wire;
 import com.example.reelworker.entities.WireViewModel;
 
+import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
@@ -65,7 +69,9 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
     private RadioGroup reelTypesGroup;
     private String initialReelType;
     String[] reelTypeValues;
-    private WireViewModel wireViewModel;
+
+    private static Wire theSelectedWire;
+    private ServiceWireDatabase database;
 
     // For formatting numbers
     private static final DecimalFormat df = new DecimalFormat("#.##");
@@ -136,12 +142,52 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
         setTitle("Add Machine Setting");
 
-        wireViewModel = ViewModelProviders.of(this).get(WireViewModel.class);
-        Wire selectedWire = wireViewModel.getWireProperties(wireName);
-        double selectedWireOD = selectedWire.getDiameter();
-        Toast.makeText(this, "Wire OD:" + selectedWireOD, Toast.LENGTH_LONG).show();
-
+        setupDatabase(wireName);
     }
+
+    private void setupDatabase(String wireName) {
+        database = ServiceWireDatabase.getDatabase(AddMachineSetting.this);
+
+        AsyncTaskRunner runner = new AsyncTaskRunner(this);
+        runner.execute(wireName);
+    }
+
+    private void showToast(){
+        Toast.makeText(this, "Wire OD: " + theSelectedWire.getDiameter(), Toast.LENGTH_SHORT).show();
+    }
+
+    private class AsyncTaskRunner extends AsyncTask<String,String,String> {
+
+        private String resp;
+        WeakReference<AddMachineSetting> activityReference;
+
+        AsyncTaskRunner(AddMachineSetting context) {
+            activityReference = new WeakReference<>(context);
+        }
+
+        @Override
+        protected String doInBackground(String... names) {
+            try {
+                theSelectedWire = activityReference.get().database.wireDao().getWireProperties(names[0]);
+                Log.d("TESTING THREAD", "doInBackground: " + theSelectedWire.getDiameter());
+                Log.d("TESTING THREAD", "doInBackground: \n");
+//                Thread.sleep(2*1000);
+                activityReference.get().traverseSpeedInput.setHint("Suggested: " + theSelectedWire.getDiameter());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast();
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                resp = e.getMessage();
+            }
+            return resp;
+        }
+    }
+
 
     private String calculateTraverseSpeed(double machineMultiplier, double wireOD) {
         if (machineMultiplier != 0) {
@@ -219,7 +265,7 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String text = parent.getItemAtPosition(position).toString();
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -316,4 +362,6 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
         reelTypesGroup.check(0);
 
     }
+
+
 }

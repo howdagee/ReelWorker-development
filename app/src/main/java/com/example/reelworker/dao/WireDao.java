@@ -24,6 +24,7 @@ public interface WireDao {
     @Query("SELECT * FROM wire WHERE name = :name ORDER BY name ASC")
     LiveData<List<Wire>> getWireByName(String name);
 
+
     @Query("SELECT * FROM wire WHERE name = :name LIMIT 1")
     Wire getWireProperties(String name);
 

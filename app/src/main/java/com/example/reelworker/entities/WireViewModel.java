@@ -38,9 +38,7 @@ public class WireViewModel extends AndroidViewModel {
     public LiveData<List<Wire>> getAllWires() {
         return allWires;
     }
-    public LiveData<List<Wire>> getWireByName(String name) {
-        return repository.getWireByName(name);
-    }
+
     public Wire getWireProperties(String name) {
         return repository.getWireProperties(name);
     }

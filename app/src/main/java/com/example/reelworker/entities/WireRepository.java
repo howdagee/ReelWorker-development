@@ -3,10 +3,12 @@ package com.example.reelworker.entities;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.reelworker.dao.WireDao;
 import com.example.reelworker.database.ServiceWireDatabase;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class WireRepository {
@@ -15,9 +17,10 @@ public class WireRepository {
     private LiveData<List<Wire>> allWires;
     private LiveData<List<Wire>> wireByName;
     private Wire wireProperties;
+    private ServiceWireDatabase database;
 
     public WireRepository(Application application) {
-        ServiceWireDatabase database = ServiceWireDatabase.getDatabase(application);
+        database = ServiceWireDatabase.getDatabase(application);
         wireDao = database.wireDao();
         allWires = wireDao.getAllWires();
     }
@@ -38,17 +41,14 @@ public class WireRepository {
         new DeleteAllWiresAsyncTask(wireDao).execute();
     }
 
+    public Wire getWireProperties(String name) {
+        return wireDao.getWireProperties(name);
+    }
+
     public LiveData<List<Wire>> getAllWires() {
         return allWires;
     }
 
-    public LiveData<List<Wire>> getWireByName(String name) {
-        return wireByName = wireDao.getWireByName(name);
-    }
-
-    public Wire getWireProperties(String name) {
-        return wireProperties = wireDao.getWireProperties(name);
-    }
 
     private static class InsertWireAsyncTask extends AsyncTask<Wire, Void, Void> {
         private WireDao wireDao;
@@ -109,5 +109,7 @@ public class WireRepository {
             return null;
         }
     }
+
+
 
 }

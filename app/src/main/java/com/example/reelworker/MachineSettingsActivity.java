@@ -106,7 +106,7 @@ public class MachineSettingsActivity extends AppCompatActivity {
             } else {
                 wireODEXTRA = "0";
             }
-            Toast.makeText(MachineSettingsActivity.this, "Suggested: " + wireODExtraHint, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MachineSettingsActivity.this, "Suggested: " + wireODExtraHint, Toast.LENGTH_SHORT).show();
         }
     };
 
