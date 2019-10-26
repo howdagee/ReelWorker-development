@@ -27,24 +27,6 @@ import java.text.NumberFormat;
 
 public class AddMachineSetting extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    public static final String EXTRA_MACHINE_SETTING_NAME =
-            "com.example.reelworker.EXTRA_MACHINE_SETTING_NAME";
-    public static final String  EXTRA_MACHINE_MULTIPLIER =
-            "com.example.reelworker.EXTRA_MACHINE_MULTIPLIER";
-    public static final String EXTRA_MACHINE_SETTING_WIRENAME =
-            "com.example.reelworker.EXTRA_MACHINE_SETTING_WIRENAME";
-    public static final String EXTRA_MACHINE_SETTING_LEFTPOSITION =
-            "com.example.reelworker.EXTRA_MACHINE_SETTING_LEFTPOSITION";
-    public static final String EXTRA_MACHINE_SETTING_RIGHTPOSITION =
-            "com.example.reelworker.EXTRA_MACHINE_SETTING_RIGHTPOSITION";
-    public static final String EXTRA_MACHINE_SETTING_TRAVERSE_SPEED =
-            "com.example.reelworker.EXTRA_MACHINE_SETTING_TRAVERSE_SPEED";
-    public static final String EXTRA_MACHINE_SETTING_REEL_TYPE =
-            "com.example.reelworker.EXTRA_MACHINE_SETTING_REEL_TYPE";
-    public static final String EXTRA_MACHINE_SETTING_REEL_SIZE =
-            "com.example.reelworker.EXTRA_MACHINE_SETTING_REEL_SIZE";
-
-
     private EditText machineNameInput;
     private EditText wireNameInput;
     private EditText leftPositionInput;
@@ -56,7 +38,7 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
     private RadioGroup reelTypesGroup;
     private String initialReelType;
     String[] reelTypeValues;
-    private double machineMultiplier;
+    private static double machineMultiplier;
 
     private static Wire theSelectedWire;
     private ServiceWireDatabase database;
@@ -64,7 +46,7 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
     // For formatting numbers
     private static final DecimalFormat df = new DecimalFormat("#.##");
     private NumberFormat percentage = NumberFormat.getPercentInstance();
-    private NumberFormat traverseFormatter = NumberFormat.getInstance();
+    private static NumberFormat traverseFormatter = NumberFormat.getInstance();
 
 
     @Override
@@ -92,13 +74,21 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
 
 
         Intent intentInfo = getIntent();
-        final String machineName = intentInfo.getStringExtra(EXTRA_MACHINE_SETTING_NAME);
-        final String machineMultiplierExtra = intentInfo.getStringExtra(EXTRA_MACHINE_MULTIPLIER);
+        Bundle extras = intentInfo.getExtras();
+        final String machineName = extras.getString("MACHINE_NAME");
+        final String machineMultiplierExtra = extras.getString("MACHINE_MULTIPLIER");
+
+        assert machineMultiplierExtra != null;
         machineMultiplier = Double.parseDouble(machineMultiplierExtra);
+        final String wireName = extras.getString("WIRE_NAME");
+        final String theReelType = extras.getString("REEL_TYPE");
+        //Helper values
+        int reelSizeDefault = extras.getInt("REEL_SIZE_DEFAULT");
+        Double leftPositionDefault = extras.getDouble("LEFT_POSITION_DEFAULT", 0.00);
+        Double rightPositionDefault = extras.getDouble("RIGHT_POSITION_DEFAULT",0.00);
+        int newReelSize = 24;
 
-        final String wireName = intentInfo.getStringExtra(EXTRA_MACHINE_SETTING_WIRENAME);
-        final String theReelType = intentInfo.getStringExtra(EXTRA_MACHINE_SETTING_REEL_TYPE);
-
+        updateLeftRightPositions(reelSizeDefault, leftPositionDefault,rightPositionDefault, newReelSize);
 
         if (machineName != null) {
             machineNameInput.setText(machineName);
@@ -110,17 +100,46 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
             initialReelType = theReelType;
         }
 
+        Toast.makeText(this, "ReelSizeDefault: "+ reelSizeDefault, Toast.LENGTH_SHORT).show();
+
         reelTypesGroup = findViewById(R.id.radio_group_reel_types);
 
         populateReelTypeOptions();
 
         selectInitialReelType();
 
-
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
         setTitle("Add Machine Setting");
 
         searchDatabaseForWire(wireName);
+    }
+
+    private void updateLeftRightPositions(int reelSizeDefault, Double leftPositionDefault, Double rightPositionDefault, int newReelSize) {
+        int difference = reelSizeDefault - newReelSize;
+
+        // Machine table in database will store whether or not the number grid starts on
+        // the left or right positions for the traverse. The multiplier will switch based on
+        // this from either 1 or -1 to accurately suggest new left/right positions for that machine.
+        int directionMultiplier = -1;
+        double splitDifference = difference/2;
+
+        if(difference < 0) {
+            // increasing reel size
+            double newLeftPositionDefault = leftPositionDefault + (directionMultiplier * splitDifference);
+            Log.d("TESTING", "updateLeftRightPositions: \nNew Left "+newLeftPositionDefault);
+            double newRightPositionDefault = rightPositionDefault - (directionMultiplier * splitDifference);
+            Log.d("TESTING", "updateLeftRightPositions: \nNew Right "+newRightPositionDefault);
+        } else {
+            if (difference > 0) {
+                // lowering reel size
+                double newLeftPositionDefault = leftPositionDefault - (directionMultiplier * (splitDifference * -1));
+                Log.d("TESTING", "updateLeftRightPositions: \nNew Left "+newLeftPositionDefault);
+                double newRightPositionDefault = rightPositionDefault + (directionMultiplier * (splitDifference * -1));
+                Log.d("TESTING", "updateLeftRightPositions: \nNew Right "+newRightPositionDefault);
+            }
+        }
+
+        // L 24.00 R: 36.00
     }
 
     private void searchDatabaseForWire(String wireName) {
@@ -130,12 +149,7 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
         runner.execute(wireName);
     }
 
-    private void showToast(){
-        Toast.makeText(this, "Wire OD: " + theSelectedWire.getDiameter(), Toast.LENGTH_SHORT).show();
-
-    }
-
-    private class AsyncTaskRunner extends AsyncTask<String,String,String> {
+    private static class AsyncTaskRunner extends AsyncTask<String,String,String> {
 
         private String resp;
         WeakReference<AddMachineSetting> activityReference;
@@ -148,18 +162,9 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
         protected String doInBackground(String... names) {
             try {
                 theSelectedWire = activityReference.get().database.wireDao().getWireProperties(names[0]);
-                Log.d("TESTING THREAD", "doInBackground: " + theSelectedWire.getDiameter());
-                Log.d("TESTING THREAD", "doInBackground: \n");
-//                Thread.sleep(2*1000);
+                Log.d("TESTING THREAD", "doInBackground: Wire OD = " + theSelectedWire.getDiameter());
                 String traverseSuggested = calculateTraverseSpeed(machineMultiplier, theSelectedWire.getDiameter());
                 activityReference.get().traverseSpeedInput.setHint("Suggested: " + traverseSuggested);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showToast();
-                    }
-                });
-
             } catch (Exception e) {
                 e.printStackTrace();
                 resp = e.getMessage();
@@ -169,7 +174,7 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
     }
 
 
-    private String calculateTraverseSpeed(double machineMultiplier, double wireOD) {
+    private static String calculateTraverseSpeed(double machineMultiplier, double wireOD) {
         if (machineMultiplier != 0) {
             double traverseSpeed = (machineMultiplier * wireOD) + wireOD;
             return traverseFormatter.format(traverseSpeed);
@@ -233,13 +238,15 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
         double traverseSpeedDouble = Double.parseDouble(traverseSpeed);
 
         Intent data = new Intent();
-        data.putExtra(EXTRA_MACHINE_SETTING_NAME, machineName);
-        data.putExtra(EXTRA_MACHINE_SETTING_WIRENAME, wireName);
-        data.putExtra(EXTRA_MACHINE_SETTING_LEFTPOSITION, leftPositionDouble);
-        data.putExtra(EXTRA_MACHINE_SETTING_RIGHTPOSITION, rightPositionDouble);
-        data.putExtra(EXTRA_MACHINE_SETTING_TRAVERSE_SPEED, traverseSpeedDouble);
-        data.putExtra(EXTRA_MACHINE_SETTING_REEL_TYPE, reelType);
-        data.putExtra(EXTRA_MACHINE_SETTING_REEL_SIZE, reelSize);
+        Bundle extras = new Bundle();
+        extras.putString("MACHINE_NAME", machineName);
+        extras.putString("WIRE_NAME", wireName);
+        extras.putDouble("LEFT_POSITION", leftPositionDouble);
+        extras.putDouble("RIGHT_POSITION", rightPositionDouble);
+        extras.putDouble("TRAVERSE_SPEED", traverseSpeedDouble);
+        extras.putString("REEL_TYPE", reelType);
+        extras.putString("REEL_SIZE", reelSize);
+        data.putExtras(extras);
 
         setResult(RESULT_OK, data);
         finish();

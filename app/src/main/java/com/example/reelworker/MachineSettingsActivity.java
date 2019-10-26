@@ -2,13 +2,9 @@ package com.example.reelworker;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,6 +28,10 @@ public class MachineSettingsActivity extends AppCompatActivity {
     private MachineSettingViewModel machineSettingViewModel;
 
     private String machineMultiplierExtra;
+
+    private double leftPositionDefault;
+    private double rightPositionDefault;
+    private String reelSizeDefaultWidth;
 
     private NumberFormat traverseFormatter = NumberFormat.getInstance();
 
@@ -58,12 +58,22 @@ public class MachineSettingsActivity extends AppCompatActivity {
         buttonAddMachineSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle extras = new Bundle();
+                extras.putString("MACHINE_NAME", machineName);
+                extras.putString("MACHINE_MULTIPLIER", machineMultiplierExtra);
+                extras.putString("WIRE_NAME", wireName);
+                extras.putString("REEL_TYPE", reelType);
+                extras.putDouble("LEFT_POSITION_DEFAULT", leftPositionDefault);
+                extras.putDouble("RIGHT_POSITION_DEFAULT", rightPositionDefault);
+                int reelSizeDefaultInt = Integer.parseInt(reelSizeDefaultWidth);
+                extras.putInt("REEL_SIZE_DEFAULT", reelSizeDefaultInt);
+                extras.putDouble("LEFT_POSITION_DEFAULT", leftPositionDefault);
+                extras.putDouble("RIGHT_POSITION_DEFAULT", rightPositionDefault);
+
                 Intent intent = new Intent(MachineSettingsActivity.this,
                         AddMachineSetting.class);
-                intent.putExtra(AddMachineSetting.EXTRA_MACHINE_SETTING_NAME, machineName);
-                intent.putExtra(AddMachineSetting.EXTRA_MACHINE_MULTIPLIER, machineMultiplierExtra);
-                intent.putExtra(AddMachineSetting.EXTRA_MACHINE_SETTING_WIRENAME, wireName);
-                intent.putExtra(AddMachineSetting.EXTRA_MACHINE_SETTING_REEL_TYPE, reelType);
+                intent.putExtras(extras);
+
                 startActivityForResult(intent, ADD_MACHINE_SETTING_REQUEST);
             }
         });
@@ -86,9 +96,20 @@ public class MachineSettingsActivity extends AppCompatActivity {
                 if (adapter.getItemCount() == 0) {
                     Toast.makeText(MachineSettingsActivity.this, "No Data Found",
                             Toast.LENGTH_SHORT).show();
+                } else {
+                    try {
+                        leftPositionDefault = machineSettingData.get(0).getLeftPosition();
+                        rightPositionDefault = machineSettingData.get(0).getRightPosition();
+                        reelSizeDefaultWidth = machineSettingData.get(0).getReelSize();
+                        Log.d("MachineSettingActivity", "onChanged: rightPosition exists: " + rightPositionDefault);
+                        Log.d("MachineSettingActivity", "onChanged: \nReel Size: " + reelSizeDefaultWidth);
+                        reelSizeDefaultWidth = reelSizeDefaultWidth.substring(reelSizeDefaultWidth.indexOf("x")+1, reelSizeDefaultWidth.lastIndexOf("x"));
+                        Log.d("REQUIRED STRING", "onChanged: \n"+ reelSizeDefaultWidth);
+                    } catch (NullPointerException e) {
+                        e.getStackTrace();
+                        Log.d("MachineSettingsActivity", "onChanged: Error - " + e.getMessage());
+                    }
                 }
-                machineSettingData.get(0).getLeftPosition();
-                machineSettingData.get(0).getRightPosition();
             }
         });
 
@@ -100,17 +121,25 @@ public class MachineSettingsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ADD_MACHINE_SETTING_REQUEST && resultCode == RESULT_OK) {
-            String machineName = data.getStringExtra(AddMachineSetting.EXTRA_MACHINE_SETTING_NAME);
-            String wireName = data.getStringExtra(AddMachineSetting.EXTRA_MACHINE_SETTING_WIRENAME);
-            double leftPosition = data.getDoubleExtra(AddMachineSetting.EXTRA_MACHINE_SETTING_LEFTPOSITION, 0);
-            double rightPosition = data.getDoubleExtra(AddMachineSetting.EXTRA_MACHINE_SETTING_RIGHTPOSITION, 0);
-            double traverseSpeed = data.getDoubleExtra(AddMachineSetting.EXTRA_MACHINE_SETTING_TRAVERSE_SPEED, 0);
-            String reelType = data.getStringExtra(AddMachineSetting.EXTRA_MACHINE_SETTING_REEL_TYPE);
-            String reelSize = data.getStringExtra(AddMachineSetting.EXTRA_MACHINE_SETTING_REEL_SIZE);
+            try {
+                assert data != null;
+                Bundle extras = data.getExtras();
 
-            MachineSetting machineSetting = new MachineSetting(machineName, wireName, leftPosition,
-                    rightPosition,traverseSpeed, reelType, reelSize);
-            machineSettingViewModel.insert(machineSetting);
+                assert extras != null;
+                String machineName = extras.getString("MACHINE_NAME");
+                String wireName = extras.getString("WIRE_NAME");
+                double leftPosition = extras.getDouble("LEFT_POSITION", 0);
+                double rightPosition = extras.getDouble("RIGHT_POSITION", 0);
+                double traverseSpeed = extras.getDouble("TRAVERSE_SPEED", 0);
+                String reelType = extras.getString("REEL_TYPE");
+                String reelSize = extras.getString("REEL_SIZE");
+
+                MachineSetting machineSetting = new MachineSetting(machineName, wireName, leftPosition,
+                        rightPosition,traverseSpeed, reelType, reelSize);
+                machineSettingViewModel.insert(machineSetting);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
 
             Toast.makeText(this, "Machine setting saved", Toast.LENGTH_SHORT).show();
         } else {
