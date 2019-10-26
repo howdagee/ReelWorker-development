@@ -1,11 +1,7 @@
 package com.example.reelworker;
 
-import android.app.ProgressDialog;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,15 +19,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.reelworker.database.ServiceWireDatabase;
-import com.example.reelworker.entities.MachineSettingData;
-import com.example.reelworker.entities.MachineSettingViewModel;
 import com.example.reelworker.entities.Wire;
-import com.example.reelworker.entities.WireViewModel;
 
 import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.List;
 
 public class AddMachineSetting extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -128,10 +120,10 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
         setTitle("Add Machine Setting");
 
-        setupDatabase(wireName);
+        searchDatabaseForWire(wireName);
     }
 
-    private void setupDatabase(String wireName) {
+    private void searchDatabaseForWire(String wireName) {
         database = ServiceWireDatabase.getDatabase(AddMachineSetting.this);
 
         AsyncTaskRunner runner = new AsyncTaskRunner(this);
@@ -232,7 +224,10 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
         }
     }
 
-    private void saveMachineSetting(String machineName, String wireName, String leftPosition, String rightPosition, String traverseSpeed, String reelType, String reelSize) {
+    private void saveMachineSetting(String machineName, String wireName, String leftPosition,
+                                    String rightPosition, String traverseSpeed, String reelType,
+                                    String reelSize)
+    {
         double leftPositionDouble = Double.parseDouble(leftPosition);
         double rightPositionDouble = Double.parseDouble(rightPosition);
         double traverseSpeedDouble = Double.parseDouble(traverseSpeed);

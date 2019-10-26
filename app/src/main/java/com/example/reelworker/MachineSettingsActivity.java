@@ -36,6 +36,8 @@ public class MachineSettingsActivity extends AppCompatActivity {
     private NumberFormat traverseFormatter = NumberFormat.getInstance();
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +87,8 @@ public class MachineSettingsActivity extends AppCompatActivity {
                     Toast.makeText(MachineSettingsActivity.this, "No Data Found",
                             Toast.LENGTH_SHORT).show();
                 }
+                machineSettingData.get(0).getLeftPosition();
+                machineSettingData.get(0).getRightPosition();
             }
         });
 
