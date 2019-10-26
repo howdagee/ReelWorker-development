@@ -41,8 +41,6 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
             "com.example.reelworker.EXTRA_MACHINE_MULTIPLIER";
     public static final String EXTRA_MACHINE_SETTING_WIRENAME =
             "com.example.reelworker.EXTRA_MACHINE_SETTING_WIRENAME";
-    public static final String EXTRA_WIRE_OD =
-            "com.example.reelworker.EXTRA_WIRE_OD";
     public static final String EXTRA_MACHINE_SETTING_LEFTPOSITION =
             "com.example.reelworker.EXTRA_MACHINE_SETTING_LEFTPOSITION";
     public static final String EXTRA_MACHINE_SETTING_RIGHTPOSITION =
@@ -53,9 +51,6 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
             "com.example.reelworker.EXTRA_MACHINE_SETTING_REEL_TYPE";
     public static final String EXTRA_MACHINE_SETTING_REEL_SIZE =
             "com.example.reelworker.EXTRA_MACHINE_SETTING_REEL_SIZE";
-
-    public static final String EXTRA_MACHINE_SETTING_TRAVERSE_HINT =
-            "com.example.reelworker.EXTRA_MACHINE_SETTING_TRAVERSE_HINT";
 
 
     private EditText machineNameInput;
@@ -69,6 +64,7 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
     private RadioGroup reelTypesGroup;
     private String initialReelType;
     String[] reelTypeValues;
+    private double machineMultiplier;
 
     private static Wire theSelectedWire;
     private ServiceWireDatabase database;
@@ -106,17 +102,7 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
         Intent intentInfo = getIntent();
         final String machineName = intentInfo.getStringExtra(EXTRA_MACHINE_SETTING_NAME);
         final String machineMultiplierExtra = intentInfo.getStringExtra(EXTRA_MACHINE_MULTIPLIER);
-        double machineMultiplier = Double.parseDouble(machineMultiplierExtra);
-        String wireODExtra = intentInfo.getStringExtra(EXTRA_WIRE_OD);
-        if (wireODExtra != null) {
-            double wireOD = Double.parseDouble(wireODExtra);
-            String calculatedTraverseSpeed = calculateTraverseSpeed(machineMultiplier, wireOD);
-            if (!calculatedTraverseSpeed.equals("0")) {
-                traverseSpeedInput.setHint("Suggested: " + calculatedTraverseSpeed);
-            } else {
-                traverseSpeedInput.setHint("");
-            }
-        }
+        machineMultiplier = Double.parseDouble(machineMultiplierExtra);
 
         final String wireName = intentInfo.getStringExtra(EXTRA_MACHINE_SETTING_WIRENAME);
         final String theReelType = intentInfo.getStringExtra(EXTRA_MACHINE_SETTING_REEL_TYPE);
@@ -154,6 +140,7 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
 
     private void showToast(){
         Toast.makeText(this, "Wire OD: " + theSelectedWire.getDiameter(), Toast.LENGTH_SHORT).show();
+
     }
 
     private class AsyncTaskRunner extends AsyncTask<String,String,String> {
@@ -172,7 +159,8 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
                 Log.d("TESTING THREAD", "doInBackground: " + theSelectedWire.getDiameter());
                 Log.d("TESTING THREAD", "doInBackground: \n");
 //                Thread.sleep(2*1000);
-                activityReference.get().traverseSpeedInput.setHint("Suggested: " + theSelectedWire.getDiameter());
+                String traverseSuggested = calculateTraverseSpeed(machineMultiplier, theSelectedWire.getDiameter());
+                activityReference.get().traverseSpeedInput.setHint("Suggested: " + traverseSuggested);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -194,7 +182,7 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
             double traverseSpeed = (machineMultiplier * wireOD) + wireOD;
             return traverseFormatter.format(traverseSpeed);
         } else {
-            return "Suggested: " + wireOD + " (OD)";
+            return "0.000";
         }
     }
 
@@ -265,7 +253,7 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String text = parent.getItemAtPosition(position).toString();
-//        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 
     @Override

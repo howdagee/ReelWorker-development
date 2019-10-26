@@ -111,9 +111,9 @@ public abstract class ServiceWireDatabase extends RoomDatabase {
 
 
             // Add some machine setting data
-            machineSettingDao.addMachineSetting(new MachineSetting("SW318", "XH500", 24.40, 34.30, .654, "Wood", "24x18"));
-            machineSettingDao.addMachineSetting(new MachineSetting("SW318", "XH250", 26.40, 31.30, .654, "Plywood", "24x12"));
-            machineSettingDao.addMachineSetting(new MachineSetting("SW437", "BST7S8", 38.650, 27.450, .200, "Plywood", "24x12"));
+            machineSettingDao.addMachineSetting(new MachineSetting("SW318", "XH500", 24.40, 34.30, .654, "Wood", "24x18x10"));
+            machineSettingDao.addMachineSetting(new MachineSetting("SW318", "XH250", 26.40, 31.30, .654, "Plywood", "24x12x10"));
+            machineSettingDao.addMachineSetting(new MachineSetting("SW437", "BST7S8", 38.650, 27.450, .200, "Plywood", "24x12x10"));
 
 
             return null;

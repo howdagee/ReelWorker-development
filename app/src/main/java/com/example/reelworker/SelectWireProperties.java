@@ -22,6 +22,7 @@ public class SelectWireProperties extends AppCompatActivity {
 
     private EditText wireName;
     private String selectedReelType;
+    private EditText wireFootage;
 
 
 
@@ -40,6 +41,7 @@ public class SelectWireProperties extends AppCompatActivity {
         populateReelTypeButtons();
         wireName = findViewById(R.id.wire_name_for_search);
         TextView machineSelectedTitle = findViewById(R.id.title_machine_selected);
+        wireFootage = findViewById(R.id.wire_footage_input);
         machineSelectedTitle.setText("Machine: " + machineName);
 
         Button  searchWireButton = findViewById(R.id.search_wire_button);
@@ -47,11 +49,13 @@ public class SelectWireProperties extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final String wireNameText = wireName.getText().toString();
+                final String wireFootageText = wireFootage.getText().toString();
                 Bundle extras = new Bundle();
                 extras.putString("MACHINE_NAME", machineName);
                 extras.putString("MACHINE_MULTIPLIER", machineMultiplierExtra);
                 extras.putString("WIRE_NAME", wireNameText);
                 extras.putString("REEL_TYPE", selectedReelType);
+                extras.putString("WIRE_FOOTAGE", wireFootageText);
 
                 Intent intent = new Intent(SelectWireProperties.this,
                                 MachineSettingsActivity.class);

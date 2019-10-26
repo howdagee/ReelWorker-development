@@ -48,6 +48,22 @@
         android:inputType="textPersonName"
         android:hint="XH500..."/>
 
+    <TextView
+        android:id="@+id/enter_footage_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Enter footage"
+        android:textAppearance="@android:style/TextAppearance.Material.Subhead"/>
+
+    <EditText
+        android:id="@+id/wire_footage_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="phone|number"
+        android:hint="1000"/>
+
     <Button
         android:id="@+id/search_wire_button"
         android:layout_width="match_parent"
