@@ -57,9 +57,7 @@ public class SelectWireProperties extends AppCompatActivity {
         searchWireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Before next screen is retrieved a thread should most likely be run to do
-                //  a quick database check to verify that the wire does exist
-                //  (If not maybe add a button to go to the AddWireActivity).
+                // TODO: Maybe add a button to go to the AddWireActivity if the wire doesn't exist.
                 if (selectedReelType != null && !wireNameInput.getText().toString().isEmpty()) {
                     wireName = wireNameInput.getText().toString();
                     if (wireFootageInput.getText().toString().isEmpty()) {
