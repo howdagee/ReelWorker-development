@@ -48,7 +48,7 @@ public class MachineSettingsActivity extends AppCompatActivity {
         final String machineName = extras.getString("MACHINE_NAME");
         final String reelType = extras.getString("REEL_TYPE");
         // TODO: pass wire footage to calculate net weight on next step/screen
-        final String wireFootage = extras.getString("WIRE_FOOTAGE");
+        final int wireFootage = extras.getInt("WIRE_FOOTAGE");
         final double machineMultiplier = extras.getDouble("MACHINE_MULTIPLIER");
         final int machineDirection = extras.getInt("MACHINE_DIRECTION");
 
@@ -65,11 +65,9 @@ public class MachineSettingsActivity extends AppCompatActivity {
                 extras.putString("REEL_TYPE", reelType);
                 extras.putDouble("LEFT_POSITION_DEFAULT", leftPositionDefault);
                 extras.putDouble("RIGHT_POSITION_DEFAULT", rightPositionDefault);
-                if (reelSizeDefaultWidth!=null) {
+                if (reelSizeDefaultWidth != null) {
                     int reelSizeDefaultInt = Integer.parseInt(reelSizeDefaultWidth);
                     extras.putInt("REEL_SIZE_DEFAULT", reelSizeDefaultInt);
-                } else {
-                    int reelSizeDefaultInt = 0;
                 }
                 extras.putDouble("LEFT_POSITION_DEFAULT", leftPositionDefault);
                 extras.putDouble("RIGHT_POSITION_DEFAULT", rightPositionDefault);

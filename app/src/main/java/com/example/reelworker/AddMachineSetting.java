@@ -123,8 +123,6 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
         if (leftPositionDefault!=0 && rightPositionDefault != 0) {
             int difference = reelSizeDefault - newReelSize;
 
-            // MachineDirection
-
             double splitDifference = difference/2;
 
             if(difference < 0) {

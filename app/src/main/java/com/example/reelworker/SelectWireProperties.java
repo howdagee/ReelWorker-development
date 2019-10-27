@@ -1,8 +1,10 @@
 package com.example.reelworker;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,11 +14,24 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.reelworker.database.ServiceWireDatabase;
+import com.example.reelworker.entities.Wire;
+
+import java.lang.ref.WeakReference;
+
 public class SelectWireProperties extends AppCompatActivity {
 
-    private EditText wireName;
+    private EditText wireNameInput;
+    private EditText wireFootageInput;
+
     private String selectedReelType;
-    private EditText wireFootage;
+    private String wireName;
+    private String machineName;
+    private double machineMultiplier;
+    private int machineDirection;
+    private int wireFootage;
+
+    private ServiceWireDatabase database;
 
 
 
@@ -28,14 +43,14 @@ public class SelectWireProperties extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-        final String machineName = extras.getString("MACHINE_NAME");
-        final double machineMultiplierExtra = extras.getDouble("MACHINE_MULTIPLIER");
-        final int machineDirection = extras.getInt("MACHINE_DIRECTION", 0);
+        machineName = extras.getString("MACHINE_NAME");
+        machineMultiplier = extras.getDouble("MACHINE_MULTIPLIER");
+        machineDirection = extras.getInt("MACHINE_DIRECTION", 0);
 
         populateReelTypeButtons();
-        wireName = findViewById(R.id.wire_name_for_search);
+        wireNameInput = findViewById(R.id.wire_name_for_search);
         TextView machineSelectedTitle = findViewById(R.id.title_machine_selected);
-        wireFootage = findViewById(R.id.wire_footage_input);
+        wireFootageInput = findViewById(R.id.wire_footage_input);
         machineSelectedTitle.setText("Machine: " + machineName);
 
         Button  searchWireButton = findViewById(R.id.search_wire_button);
@@ -45,28 +60,86 @@ public class SelectWireProperties extends AppCompatActivity {
                 // TODO: Before next screen is retrieved a thread should most likely be run to do
                 //  a quick database check to verify that the wire does exist
                 //  (If not maybe add a button to go to the AddWireActivity).
-                if (selectedReelType != null && !wireName.getText().toString().isEmpty()) {
-                    final String wireNameText = wireName.getText().toString();
-                    final String wireFootageText = wireFootage.getText().toString();
-                    Bundle extras = new Bundle();
-                    extras.putString("MACHINE_NAME", machineName);
-                    extras.putDouble("MACHINE_MULTIPLIER", machineMultiplierExtra);
-                    extras.putString("WIRE_NAME", wireNameText);
-                    extras.putString("REEL_TYPE", selectedReelType);
-                    extras.putString("WIRE_FOOTAGE", wireFootageText);
-                    extras.putInt("MACHINE_DIRECTION", machineDirection);
+                if (selectedReelType != null && !wireNameInput.getText().toString().isEmpty()) {
+                    wireName = wireNameInput.getText().toString();
+                    if (wireFootageInput.getText().toString().isEmpty()) {
+                        wireFootage = 0;
+                    } else {
+                        wireFootage = Integer.parseInt(wireFootageInput.getText().toString());
+                    }
 
-                    Intent intent = new Intent(SelectWireProperties.this,
-                                    MachineSettingsActivity.class);
-                    intent.putExtras(extras);
-
-                    startActivity(intent);
+                    checkIfWireExists(wireName);
                 } else {
                     Toast.makeText(SelectWireProperties.this, "Reel type and wire name must be filled out", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
+    }
+
+    private void createBundleAndProceed() {
+        Bundle extras = new Bundle();
+        extras.putString("MACHINE_NAME", machineName);
+        extras.putDouble("MACHINE_MULTIPLIER", machineMultiplier);
+        extras.putString("WIRE_NAME", wireName);
+        extras.putString("REEL_TYPE", selectedReelType);
+        extras.putInt("WIRE_FOOTAGE", wireFootage);
+        extras.putInt("MACHINE_DIRECTION", machineDirection);
+
+        Intent intent = new Intent(SelectWireProperties.this,
+                MachineSettingsActivity.class);
+        intent.putExtras(extras);
+
+        startActivity(intent);
+    }
+
+    private void checkIfWireExists(String wireName) {
+        database = ServiceWireDatabase.getDatabase(SelectWireProperties.this);
+
+        AsyncTaskCheckWireExists runner = new AsyncTaskCheckWireExists(this);
+        runner.execute(wireName);
+    }
+
+    private static class AsyncTaskCheckWireExists extends AsyncTask<String, Boolean, Boolean> {
+        WeakReference<SelectWireProperties> activityReference;
+
+        AsyncTaskCheckWireExists(SelectWireProperties context) {
+            activityReference = new WeakReference<>(context);
+        }
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            boolean success = false;
+            try {
+                Wire theSelectedWire = activityReference.get().database.wireDao().getWireProperties(strings[0]);
+                if (theSelectedWire != null) {
+                    Log.d("SELECT WIRE PROPERTIES", "doInBackground: Wire Exists!");
+                    success = true;
+                } else  {
+                    Log.d("SELECT WIRE PROPERTIES", "doInBackground: Wire NOT Found!");
+                    success = false;
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                Log.e("NULL POINTER", "doInBackground: ERROR occured: " + e.getMessage());
+            }
+            return success;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            super.onPostExecute(success);
+            if (success) {
+                activityReference.get().createBundleAndProceed();
+            } else {
+                Log.d("SELECTWIRE PROPERTIES", "onPostExecute: Failed success");
+                activityReference.get().notifyUser("Wire does not exist");
+            }
+        }
+    }
+
+    private void notifyUser(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void populateReelTypeButtons() {
