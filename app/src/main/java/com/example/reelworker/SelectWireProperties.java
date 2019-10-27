@@ -42,21 +42,28 @@ public class SelectWireProperties extends AppCompatActivity {
         searchWireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String wireNameText = wireName.getText().toString();
-                final String wireFootageText = wireFootage.getText().toString();
-                Bundle extras = new Bundle();
-                extras.putString("MACHINE_NAME", machineName);
-                extras.putDouble("MACHINE_MULTIPLIER", machineMultiplierExtra);
-                extras.putString("WIRE_NAME", wireNameText);
-                extras.putString("REEL_TYPE", selectedReelType);
-                extras.putString("WIRE_FOOTAGE", wireFootageText);
-                extras.putInt("MACHINE_DIRECTION", machineDirection);
+                // TODO: Before next screen is retrieved a thread should most likely be run to do
+                //  a quick database check to verify that the wire does exist
+                //  (If not maybe add a button to go to the AddWireActivity).
+                if (selectedReelType != null && !wireName.getText().toString().isEmpty()) {
+                    final String wireNameText = wireName.getText().toString();
+                    final String wireFootageText = wireFootage.getText().toString();
+                    Bundle extras = new Bundle();
+                    extras.putString("MACHINE_NAME", machineName);
+                    extras.putDouble("MACHINE_MULTIPLIER", machineMultiplierExtra);
+                    extras.putString("WIRE_NAME", wireNameText);
+                    extras.putString("REEL_TYPE", selectedReelType);
+                    extras.putString("WIRE_FOOTAGE", wireFootageText);
+                    extras.putInt("MACHINE_DIRECTION", machineDirection);
 
-                Intent intent = new Intent(SelectWireProperties.this,
-                                MachineSettingsActivity.class);
-                intent.putExtras(extras);
+                    Intent intent = new Intent(SelectWireProperties.this,
+                                    MachineSettingsActivity.class);
+                    intent.putExtras(extras);
 
-                startActivity(intent);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(SelectWireProperties.this, "Reel type and wire name must be filled out", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -82,12 +89,9 @@ public class SelectWireProperties extends AppCompatActivity {
             button.setLayoutParams(params);
 
 
-//            TODO: set on-click callbacks
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Toast.makeText(SelectWireProperties.this, "Selected: " + reel,
-//                            Toast.LENGTH_SHORT).show();
                     selectedReelType = reel;
                 }
             });
