@@ -14,12 +14,6 @@ import android.widget.Toast;
 
 public class SelectWireProperties extends AppCompatActivity {
 
-    public static final String EXTRA_MACHINE_NAME =
-            "com.example.reelworker.EXTRA_MACHINE_NAME";
-
-    public static final String EXTRA_MACHINE_MULTIPLIER =
-            "com.example.reelworker.EXTRA_MACHINE_MULTIPLIER";
-
     private EditText wireName;
     private String selectedReelType;
     private EditText wireFootage;
@@ -32,11 +26,11 @@ public class SelectWireProperties extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_wire_properties);
 
-        Intent intentInfo = getIntent();
-        final String machineName = intentInfo.getStringExtra(EXTRA_MACHINE_NAME);
-        final String machineMultiplierExtra = intentInfo.getStringExtra(EXTRA_MACHINE_MULTIPLIER);
-
-//        setTitle("Reel Worker (" + machineName + ")");
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        final String machineName = extras.getString("MACHINE_NAME");
+        final double machineMultiplierExtra = extras.getDouble("MACHINE_MULTIPLIER");
+        final int machineDirection = extras.getInt("MACHINE_DIRECTION", 0);
 
         populateReelTypeButtons();
         wireName = findViewById(R.id.wire_name_for_search);
@@ -52,10 +46,11 @@ public class SelectWireProperties extends AppCompatActivity {
                 final String wireFootageText = wireFootage.getText().toString();
                 Bundle extras = new Bundle();
                 extras.putString("MACHINE_NAME", machineName);
-                extras.putString("MACHINE_MULTIPLIER", machineMultiplierExtra);
+                extras.putDouble("MACHINE_MULTIPLIER", machineMultiplierExtra);
                 extras.putString("WIRE_NAME", wireNameText);
                 extras.putString("REEL_TYPE", selectedReelType);
                 extras.putString("WIRE_FOOTAGE", wireFootageText);
+                extras.putInt("MACHINE_DIRECTION", machineDirection);
 
                 Intent intent = new Intent(SelectWireProperties.this,
                                 MachineSettingsActivity.class);

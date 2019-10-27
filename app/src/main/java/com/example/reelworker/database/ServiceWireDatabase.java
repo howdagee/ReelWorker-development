@@ -84,13 +84,13 @@ public abstract class ServiceWireDatabase extends RoomDatabase {
             machineSettingDao.deleteAll();
             wireDao.deleteAllWires();
             machineDao.deleteAll();
+            int LEFT_RIGHT = 1;
+            int RIGHT_LEFT = -1;
 
             // Add machines to database
-            // TODO: add new property, where it will keep track of number grid high to low. Since
-            //  we will need to know if it goes left/right or vice versa. Value might be -1 or 1
-            machineDao.insertMachine(new Machine("SW318", .02569));
-            machineDao.insertMachine(new Machine("SW437", .20569));
-            machineDao.insertMachine(new Machine("SW327", 27.0));
+            machineDao.insertMachine(new Machine("SW318", .02569, LEFT_RIGHT));
+            machineDao.insertMachine(new Machine("SW437", .20569, RIGHT_LEFT));
+            machineDao.insertMachine(new Machine("SW327", 27.0, RIGHT_LEFT));
 
             // Add wire
             wireDao.addWire(new Wire("XH500", 15.0, "150", .926, "1631"));

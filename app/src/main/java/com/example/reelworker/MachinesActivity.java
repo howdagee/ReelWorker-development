@@ -69,10 +69,13 @@ public class MachinesActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new MachineAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Machine machine) {
+                Bundle extras = new Bundle();
+                extras.putString("MACHINE_NAME", machine.getName());
+                extras.putDouble("MACHINE_MULTIPLIER", machine.getMultiplier());
+                extras.putInt("MACHINE_DIRECTION", machine.getNumberDirection());
                 Intent intent =
                         new Intent(MachinesActivity.this, SelectWireProperties.class);
-                intent.putExtra(SelectWireProperties.EXTRA_MACHINE_NAME, machine.getName());
-                intent.putExtra(SelectWireProperties.EXTRA_MACHINE_MULTIPLIER, String.valueOf(machine.getMultiplier()));
+                intent.putExtras(extras);
                 startActivity(intent);
             }
         });

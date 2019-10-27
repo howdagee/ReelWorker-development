@@ -24,6 +24,17 @@ public class Machine {
     @ColumnInfo(name = "multiplier")
     private double multiplier;
 
+    @ColumnInfo(name = "number_direction")
+    private int numberDirection;
+
+    public int getNumberDirection() {
+        return numberDirection;
+    }
+
+    public void setNumberDirection(int numberDirection) {
+        this.numberDirection = numberDirection;
+    }
+
     public double getMultiplier() {
         return multiplier;
     }
@@ -32,9 +43,10 @@ public class Machine {
         this.multiplier = multiplier;
     }
 
-    public Machine(@NonNull String name, double multiplier) {
+    public Machine(@NonNull String name, double multiplier, int numberDirection) {
         this.name = name;
         this.multiplier = multiplier;
+        this.numberDirection = numberDirection;
     }
 
 

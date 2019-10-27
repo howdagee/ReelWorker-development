@@ -27,7 +27,6 @@ public class MachineSettingsActivity extends AppCompatActivity {
 
     private MachineSettingViewModel machineSettingViewModel;
 
-    private String machineMultiplierExtra;
 
     private double leftPositionDefault;
     private double rightPositionDefault;
@@ -50,7 +49,8 @@ public class MachineSettingsActivity extends AppCompatActivity {
         final String reelType = extras.getString("REEL_TYPE");
         // TODO: pass wire footage to calculate net weight on next step/screen
         final String wireFootage = extras.getString("WIRE_FOOTAGE");
-        machineMultiplierExtra = extras.getString("MACHINE_MULTIPLIER");
+        final double machineMultiplier = extras.getDouble("MACHINE_MULTIPLIER");
+        final int machineDirection = extras.getInt("MACHINE_DIRECTION");
 
         traverseFormatter.setMinimumFractionDigits(3);
 
@@ -60,15 +60,20 @@ public class MachineSettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Bundle extras = new Bundle();
                 extras.putString("MACHINE_NAME", machineName);
-                extras.putString("MACHINE_MULTIPLIER", machineMultiplierExtra);
+                extras.putDouble("MACHINE_MULTIPLIER", machineMultiplier);
                 extras.putString("WIRE_NAME", wireName);
                 extras.putString("REEL_TYPE", reelType);
                 extras.putDouble("LEFT_POSITION_DEFAULT", leftPositionDefault);
                 extras.putDouble("RIGHT_POSITION_DEFAULT", rightPositionDefault);
-                int reelSizeDefaultInt = Integer.parseInt(reelSizeDefaultWidth);
-                extras.putInt("REEL_SIZE_DEFAULT", reelSizeDefaultInt);
+                if (reelSizeDefaultWidth!=null) {
+                    int reelSizeDefaultInt = Integer.parseInt(reelSizeDefaultWidth);
+                    extras.putInt("REEL_SIZE_DEFAULT", reelSizeDefaultInt);
+                } else {
+                    int reelSizeDefaultInt = 0;
+                }
                 extras.putDouble("LEFT_POSITION_DEFAULT", leftPositionDefault);
                 extras.putDouble("RIGHT_POSITION_DEFAULT", rightPositionDefault);
+                extras.putInt("MACHINE_DIRECTION", machineDirection);
 
                 Intent intent = new Intent(MachineSettingsActivity.this,
                         AddMachineSetting.class);
