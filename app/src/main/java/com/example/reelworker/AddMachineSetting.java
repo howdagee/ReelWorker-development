@@ -44,6 +44,7 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
     private double leftPositionDefault;
     private double rightPositionDefault;
     private int machineDirection;
+    private static String defaultTraverse;
 
     private ServiceWireDatabase database;
 
@@ -185,7 +186,7 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
                 Wire theSelectedWire = activityReference.get().database.wireDao().getWireProperties(names[0]);
                 Log.d("TESTING THREAD", "doInBackground: Wire OD = " + theSelectedWire.getDiameter());
                 String traverseSuggested = calculateTraverseSpeed(machineMultiplier, theSelectedWire.getDiameter());
-                activityReference.get().traverseSpeedInput.setHint("Suggested: " + traverseSuggested);
+                activityReference.get().traverseSpeedInput.setHint("Default: " + traverseSuggested);
             } catch (Exception e) {
                 e.printStackTrace();
                 resp = e.getMessage();
@@ -198,9 +199,9 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
     private static String calculateTraverseSpeed(double machineMultiplier, double wireOD) {
         if (machineMultiplier != 0) {
             double traverseSpeed = (machineMultiplier * wireOD) + wireOD;
-            return traverseFormatter.format(traverseSpeed);
+            return defaultTraverse = traverseFormatter.format(traverseSpeed);
         } else {
-            return "0.000";
+            return defaultTraverse = "0.000";
         }
     }
 
@@ -339,6 +340,10 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
                                 @Override
                                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                     reelSizeSelected = parent.getItemAtPosition(position).toString();
+
+                                    String newReelSize = parent.getSelectedItem().toString();
+                                    int newReelSizeWidth = Integer.parseInt(newReelSize.substring(newReelSize.indexOf("x")+1, newReelSize.lastIndexOf("x")));
+                                    updateLeftRightPositions(newReelSizeWidth, machineDirection);
                                 }
 
                                 @Override
@@ -360,6 +365,10 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
                                 @Override
                                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                     reelSizeSelected = parent.getItemAtPosition(position).toString();
+
+                                    String newReelSize = parent.getSelectedItem().toString();
+                                    int newReelSizeWidth = Integer.parseInt(newReelSize.substring(newReelSize.indexOf("x")+1, newReelSize.lastIndexOf("x")));
+                                    updateLeftRightPositions(newReelSizeWidth, machineDirection);
                                 }
 
                                 @Override
