@@ -243,11 +243,16 @@ public class AddMachineSetting extends AppCompatActivity implements AdapterView.
 
         if (machineName.trim().isEmpty() || wireName.trim().isEmpty()
                 || leftPosition.trim().isEmpty() || rightPosition.trim().isEmpty()
-                || traverseSpeed.trim().isEmpty() || reelSize.trim().isEmpty()) {
+                || reelSize.trim().isEmpty()) {
             Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show();
         } else {
-            saveMachineSetting(machineName, wireName, leftPosition, rightPosition, traverseSpeed,
-                    selectedReelType, reelSize);
+            if (defaultTraverse != null && traverseSpeed.isEmpty()) {
+                saveMachineSetting(machineName, wireName, leftPosition, rightPosition, defaultTraverse,
+                        selectedReelType, reelSize);
+            } else {
+                saveMachineSetting(machineName, wireName, leftPosition, rightPosition, traverseSpeed,
+                        selectedReelType, reelSize);
+            }
         }
     }
 

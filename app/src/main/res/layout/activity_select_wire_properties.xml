@@ -68,8 +68,19 @@
         android:id="@+id/search_wire_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="20dp"
         android:layout_marginTop="16dp"
         android:text="Search Machine Settings" />
+
+    <Button
+        android:id="@+id/add_wire_button"
+        android:layout_marginTop="80dp"
+        android:text="Create Wire Entry"
+        android:padding="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+    </Button>
 
 
 </LinearLayout>

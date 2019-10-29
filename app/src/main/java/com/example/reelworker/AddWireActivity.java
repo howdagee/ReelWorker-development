@@ -61,7 +61,7 @@ public class AddWireActivity extends AppCompatActivity {
         if (wireName.trim().isEmpty() || wireDiameter.trim().isEmpty()
                 || sparkSetting.trim().isEmpty() || scrapAmount.trim().isEmpty()
                 || weight.trim().isEmpty()) {
-            Toast.makeText(this, "Please make sure all fields are filled out", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please filled out all fields", Toast.LENGTH_SHORT).show();
         } else {
             saveWire(wireName, sparkSetting, scrapAmount, wireDiameter, weight);
         }

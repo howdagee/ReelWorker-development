@@ -24,7 +24,7 @@ import java.util.List;
             Wire.class,
             MachineSetting.class
         },
-        version = 2, exportSchema = false)
+        version = 3, exportSchema = false)
 public abstract class ServiceWireDatabase extends RoomDatabase {
 
     private static ServiceWireDatabase INSTANCE;

@@ -21,6 +21,8 @@ import java.lang.ref.WeakReference;
 
 public class SelectWireProperties extends AppCompatActivity {
 
+    private static final int ADD_WIRE_REQUEST = 1;
+
     private EditText wireNameInput;
     private EditText wireFootageInput;
 
@@ -70,6 +72,15 @@ public class SelectWireProperties extends AppCompatActivity {
                 } else {
                     Toast.makeText(SelectWireProperties.this, "Reel type and wire name must be filled out", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        Button addWireButton = findViewById(R.id.add_wire_button);
+        addWireButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SelectWireProperties.this, AddWireActivity.class);
+                startActivityForResult(intent, ADD_WIRE_REQUEST);
             }
         });
 
@@ -130,7 +141,7 @@ public class SelectWireProperties extends AppCompatActivity {
             if (success) {
                 activityReference.get().createBundleAndProceed();
             } else {
-                Log.d("SELECTWIRE PROPERTIES", "onPostExecute: Failed success");
+                Log.d("SELECTWIRE PROPERTIES", "onPostExecute: No wire entry");
                 activityReference.get().notifyUser("Wire does not exist");
             }
         }
